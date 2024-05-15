@@ -1,0 +1,13 @@
+mongodb = mongodb+srv://oladejianthony4:Tdwonder1@chat-app.2tnqrpx.mongodb.net/
+
+npm init
+
+
+npm i express cors nodemon mongoose multer passport passport-local jsonwebtoken
+
+
+frontend
+npm install @react-navigation/native
+npx expo install react-native-screens react-native-safe-area-context
+npm install @react-navigation/native-stack
+
