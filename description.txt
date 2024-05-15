@@ -11,3 +11,11 @@ npm install @react-navigation/native
 npx expo install react-native-screens react-native-safe-area-context
 npm install @react-navigation/native-stack
 
+
+backend Operations
+models
+Routes & Controllers
+
+
+My Laptop IP Address - replace localhost with "192.168.0.5"
+axios.post("http://192.168.0.5:8000/register", user)

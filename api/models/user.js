@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -18,7 +17,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  friendRequests: [
+  freindRequests: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -38,8 +37,6 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
-
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
-
