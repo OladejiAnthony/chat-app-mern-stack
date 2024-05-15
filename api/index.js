@@ -55,7 +55,7 @@ app.post("/register", (req, res) => {
     });
 });
 
-//function to create a token for the user
+//function to create a token for the user based on user id
 const createToken = (userId) => {
   // Set the token payload
   const payload = {
@@ -92,6 +92,7 @@ app.post("/login", (req, res) => {
         return res.status(404).json({ message: "Invalid Password!" });
       }
 
+      //if email & pwd is correct, create token for user with his id
       const token = createToken(user._id);
       res.status(200).json({ token });
     })

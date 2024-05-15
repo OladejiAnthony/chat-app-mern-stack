@@ -6,14 +6,46 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+
+
+  useEffect(() => {
+    const checkLoginStatus = async() => {
+      
+    }
+  }, []);
+
+  const handleLogin = () => {
+    const user = {
+      email: email,
+      password: password,
+    };
+
+    // send a POST  request to the backend API to register the user
+    axios
+      .post("http://192.168.0.5:8000/login", user)
+      .then((response) => {
+        console.log(response);
+        const token = response.data.token;
+        //store token into asyncStorage(setItem and getItem with the key)
+        AsyncStorage.setItem("authToken", token);
+        //navigate to the homescreen
+        navigation.navigate("Home");
+      })
+      .catch((error) => {
+        Alert.alert("Login Error", "Invalid email or password");
+        console.log("Login failed", error);
+      });
+  };
 
   return (
     <View
@@ -81,7 +113,7 @@ const LoginScreen = () => {
           </View>
 
           <Pressable
-            onPress={() => navigation.navigate("Home")}
+            onPress={handleLogin}
             style={{
               width: 200,
               backgroundColor: "#4A55A2",
@@ -128,3 +160,7 @@ const LoginScreen = () => {
 export default LoginScreen;
 
 const styles = StyleSheet.create({});
+
+
+
+//1hr,13mins
