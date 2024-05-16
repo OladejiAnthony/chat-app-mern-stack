@@ -21,6 +21,7 @@ const LoginScreen = () => {
   useEffect(() => {
     const checkLoginStatus = async() => {
       
+      
     }
   }, []);
 
