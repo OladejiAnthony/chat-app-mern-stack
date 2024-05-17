@@ -33,7 +33,6 @@ const LoginScreen = () => {
         console.log("Error: ", error);
       }
     };
-
     checkLoginStatus();
   }, []);
 

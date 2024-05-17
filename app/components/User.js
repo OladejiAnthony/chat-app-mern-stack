@@ -1,5 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { UserType } from "../../UserContext";
 
 const User = ({ item }) => {
@@ -7,6 +7,9 @@ const User = ({ item }) => {
 
   const { userId, setUserId } = useContext(UserType);
   console.log(userId)
+  const [requestSent, setRequestSent] = useState(false)
+
+
   const sendFriendRequest = async (currentUserId, selectedUserId) => {
     try {
       const response  = await fetch("http://192.168.0.5:8000/friend-request", {
@@ -16,6 +19,11 @@ const User = ({ item }) => {
         },
         body: JSON.stringify({currentUserId, selectedUserId})
       })
+
+      if(response.ok) {
+        setRequestSent(true);
+      }
+
     } catch(error) {
       console.log("Error message:", error.message)
     }

@@ -133,6 +133,7 @@ app.post("/friend-request", async (req, res) => {
     //update the sender's sentFriendRequests array in MongoDb
     await User.findByIdAndUpdate(currentUserId, {
       $push: { sentFriendRequests: selectedUserId },
+      //updating the id of the sender
     });
 
     res.sendStatus(200);
@@ -144,6 +145,7 @@ app.post("/friend-request", async (req, res) => {
 //endpoint to show all the friend-requests of a particular user
 app.get("/friend-request/:userId", async (req, res) => {
   try {
+    //access userId of the user
     const { userId } = req.params;
 
     //fetch the user document based on the User id
@@ -190,7 +192,7 @@ app.post("/friend-request/accept", async (req, res) => {
   }
 });
 
-//endpoint to access all the friends of the logged in user!
+//endpoint to access all the accepted friends of the logged in user!
 app.get("/accepted-friends/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
