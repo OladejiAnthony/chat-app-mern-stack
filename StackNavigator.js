@@ -6,7 +6,6 @@ import LoginScreen from "./app/screens/LoginScreen";
 import RegisterScreen from "./app/screens/RegisterScreen";
 import HomeScreen from "./app/screens/HomeScreen";
 
-
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
   return (
@@ -22,9 +21,13 @@ const StackNavigator = () => {
           component={RegisterScreen}
           options={{ headerShown: false }}
         />
- 
-        <Stack.Screen name="Home" component={HomeScreen} />
-{/*
+
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          //options={{ headerShown: false }}
+        />
+        {/*
         <Stack.Screen name="Friends" component={FriendsScreen} />
 
         <Stack.Screen name="Chats" component={ChatsScreen} />
@@ -39,5 +42,3 @@ const StackNavigator = () => {
 export default StackNavigator;
 
 const styles = StyleSheet.create({});
-
-

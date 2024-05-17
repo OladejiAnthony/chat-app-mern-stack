@@ -17,13 +17,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  freindRequests: [
+  friends: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
   ],
-  friends: [
+  freindRequests: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -40,3 +40,4 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
+

@@ -17,12 +17,24 @@ const LoginScreen = () => {
 
   const navigation = useNavigation();
 
-
   useEffect(() => {
-    const checkLoginStatus = async() => {
-      
-      
-    }
+    const checkLoginStatus = async () => {
+      //access token using AsyncStorage
+      try {
+        const token = await AsyncStorage.getItem("authToken");
+
+        if (token) {
+          //if token is present, jump automatically to the HomsScreen without requiring user to Login again even when user minimize the app
+          navigation.navigate("Home");
+        } else {
+          //token not found, show the Login screen itself so that user can login
+        }
+      } catch (error) {
+        console.log("Error: ", error);
+      }
+    };
+
+    checkLoginStatus();
   }, []);
 
   const handleLogin = () => {
@@ -39,8 +51,8 @@ const LoginScreen = () => {
         const token = response.data.token;
         //store token into asyncStorage(setItem and getItem with the key)
         AsyncStorage.setItem("authToken", token);
-        //navigate to the homescreen
-        navigation.navigate("Home");
+        //navigate to the HomeScreen
+        navigation.replace("Home");
       })
       .catch((error) => {
         Alert.alert("Login Error", "Invalid email or password");
@@ -161,7 +173,5 @@ const LoginScreen = () => {
 export default LoginScreen;
 
 const styles = StyleSheet.create({});
-
-
 
 //1hr,13mins

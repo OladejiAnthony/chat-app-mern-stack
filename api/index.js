@@ -102,11 +102,12 @@ app.post("/login", (req, res) => {
     });
 });
 
-//endpoint to access all the users except the user who's is currently logged in!
+//endpoint to get all the users in the app except the user who is currently logged in!
 app.get("/users/:userId", (req, res) => {
-  const loggedInUserId = req.params.userId;
+  const loggedInUserId = req.params.userId; 
+  //params "123" e.g users/123
 
-  User.find({ _id: { $ne: loggedInUserId } })
+  User.find({ _id: { $ne: loggedInUserId } }) //exclude the user that is loggedin
     .then((users) => {
       res.status(200).json(users);
     })
@@ -116,17 +117,20 @@ app.get("/users/:userId", (req, res) => {
     });
 });
 
-//endpoint to send a request to a user
+//endpoint to send a request to another user
 app.post("/friend-request", async (req, res) => {
   const { currentUserId, selectedUserId } = req.body;
+  //sender - currentUserId
+  //recipient - selectedUserId 
 
   try {
-    //update the recepient's friendRequestsArray!
+    //update the recepient's friendRequests array in MongoDb!
     await User.findByIdAndUpdate(selectedUserId, {
       $push: { freindRequests: currentUserId },
+      //updating the id of the recipient
     });
 
-    //update the sender's sentFriendRequests array
+    //update the sender's sentFriendRequests array in MongoDb
     await User.findByIdAndUpdate(currentUserId, {
       $push: { sentFriendRequests: selectedUserId },
     });
