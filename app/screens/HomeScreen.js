@@ -22,9 +22,18 @@ const HomeScreen = () => {
       },
       headerRight: () => {
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <Ionicons name="chatbox-ellipse-outline" size={24} color="" />
-
-          <MaterialIcons name="people-outline" size={24} color="" />
+          <Ionicons
+            onPress={() => navigation.navigate("Chats")}
+            name="chatbox-ellipse-outline"
+            size={24}
+            color=""
+          />
+          <MaterialIcons
+            onPress={() => navigation.navigate("Friends")}
+            name="people-outline"
+            size={24}
+            color=""
+          />
         </View>;
       },
     });
@@ -38,26 +47,27 @@ const HomeScreen = () => {
       const userId = decodedToken.userId;
       setUserId(userId);
 
-      axios.get(`http://192.168.0.5:8000/users/${userId}`).then((response) => {
-        setUsers(response.data);
-      }).catch((error) => {
-        console.log("error retrieving users", error)
-      })
+      axios
+        .get(`http://192.168.0.5:8000/users/${userId}`)
+        .then((response) => {
+          setUsers(response.data);
+        })
+        .catch((error) => {
+          console.log("error retrieving users", error);
+        });
     };
-    fetchUsers()
+    fetchUsers();
   }, []);
 
-
-  console.log("users: ", users)
+  console.log("users: ", users);
 
   return (
     <View>
-      <View style={{padding: 10}}>
+      <View style={{ padding: 10 }}>
         {users.map((item, index) => {
-          <User key={index} item={item}  />
+          <User key={index} item={item} />;
         })}
       </View>
-
     </View>
   );
 };

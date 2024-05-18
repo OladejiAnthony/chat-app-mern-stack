@@ -1,7 +1,38 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
+import { UserType } from "../../UserContext";
+import { useNavigation } from "@react-navigation/native";
 
 const FriendRequest = ({ item, friendRequests, setFriendRequests }) => {
+    //console.log(item);
+    const { userId, setUserId } = useContext(UserType);
+
+    const navigation = useNavigation();
+
+  const acceptRequest = async ({friendRequestId}) => {
+    try {
+        const response = await fetch("http://192.168.0.5:8000/friend-request/accept", {
+            method : "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                senderId: friendRequestId,
+                recepientId: userId
+            })
+        });
+
+        if(response.ok) {
+            setFriendRequests(friendRequests.filter((request) =>  request._id !== friendRequestId));
+            navigation.navigate("Chats");
+        }
+
+    } catch (error) {
+        console.log("Error: ", error.message)
+    }
+  }
+
+
   return (
     <Pressable
       style={{
@@ -24,8 +55,11 @@ const FriendRequest = ({ item, friendRequests, setFriendRequests }) => {
         style={{ backgroundColor: "#0066b2", padding: 10, borderRadius: 6 }}
       >
         <Text
-            onPress={() => {}}
-         style={{ textAlign: "center", color: "white" }}>Accept</Text>
+          onPress={() => acceptRequest._id}
+          style={{ textAlign: "center", color: "white" }}
+        >
+          Accept
+        </Text>
       </Pressable>
     </Pressable>
   );
