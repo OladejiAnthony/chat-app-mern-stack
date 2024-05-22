@@ -5,22 +5,36 @@ npm init
 npm i express cors nodemon mongoose multer passport passport-local jsonwebtoken
 
 
-frontend-
+Frontend-
 npm install @react-navigation/native
 npx expo install react-native-screens react-native-safe-area-context
 npm install @react-navigation/native-stack
 npx expo install @react-native-async-storage/async-storage
 npm install jwt-decode
+npx expo install expo-image-picker
 
 packages-
 expo.icons.fy
 
 
-backend-
+Backend-
 models
 Routes & Controllers
 
 Laptop-
 My Laptop IP Address - replace localhost with "192.168.0.5"
 axios.post("http://192.168.0.5:8000/register", user)
+
+-Expo image picker Library
+  copy this code and paste inside your app.json
+      "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ],
+
+
 

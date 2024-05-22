@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserType } from "../../UserContext";
 import axios from "axios";
 import FriendRequest from "../components/FriendRequest";
@@ -43,14 +43,14 @@ const FriendsScreen = () => {
     >
       {friendRequests.length > 0 && <Text>Your Friend Requests</Text>}
 
-      {
-        friendRequests.map((item, index) => {
-            <FriendRequest
-
-            />
-        })
-      }
-
+      {friendRequests.map((item, index) => {
+        <FriendRequest
+          key={index}
+          item={item}
+          friendRequests={friendRequests}
+          setFriendRequests={setFriendRequests}
+        />;
+      })}
     </View>
   );
 };

@@ -3,8 +3,7 @@ import React, { useContext, useState } from "react";
 import { UserType } from "../../UserContext";
 
 const User = ({ item }) => {
-  console.log(item)
-
+  //console.log(item)
   const { userId, setUserId } = useContext(UserType);
   console.log(userId)
   const [requestSent, setRequestSent] = useState(false)
@@ -19,6 +18,8 @@ const User = ({ item }) => {
         },
         body: JSON.stringify({currentUserId, selectedUserId})
       })
+
+      console.log(response.data)
 
       if(response.ok) {
         setRequestSent(true);

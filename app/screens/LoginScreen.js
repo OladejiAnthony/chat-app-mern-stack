@@ -1,4 +1,5 @@
 import {
+  Alert,
   KeyboardAvoidingView,
   Pressable,
   StyleSheet,
@@ -17,47 +18,49 @@ const LoginScreen = () => {
 
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      //access token using AsyncStorage
-      try {
-        const token = await AsyncStorage.getItem("authToken");
+  // useEffect(() => {
+  //   const checkLoginStatus = async () => {
+  //     //access token using AsyncStorage
+  //     try {
+  //       const token = await AsyncStorage.getItem("authToken");
 
-        if (token) {
-          //if token is present, jump automatically to the HomsScreen without requiring user to Login again even when user minimize the app
-          navigation.navigate("Home");
-        } else {
-          //token not found, show the Login screen itself so that user can login
-        }
-      } catch (error) {
-        console.log("Error: ", error);
-      }
-    };
-    checkLoginStatus();
-  }, []);
+  //       if (token) {
+  //         //if token is present, jump automatically to the HomsScreen without requiring user to Login again even when user minimize the app
+  //         navigation.navigate("Home");
+  //       } else {
+  //         //token not found, show the Login screen itself so that user can login
+  //       }
+  //     } catch (error) {
+  //       console.log("Error: ", error);
+  //     }
+  //   };
+  //   checkLoginStatus();
+  // }, []);
+
 
   const handleLogin = () => {
     const user = {
       email: email,
       password: password,
     };
+    console.log("user: ",user)
 
-    // send a POST  request to the backend API to register the user
     axios
       .post("http://192.168.0.5:8000/login", user)
       .then((response) => {
-        console.log(response);
+        console.log("response: ", response);
         const token = response.data.token;
-        //store token into asyncStorage(setItem and getItem with the key)
+        console.log("token: ", token)
         AsyncStorage.setItem("authToken", token);
-        //navigate to the HomeScreen
+
         navigation.replace("Home");
       })
       .catch((error) => {
         Alert.alert("Login Error", "Invalid email or password");
-        console.log("Login failed", error);
+        console.log("Login Error", error);
       });
   };
+
 
   return (
     <View

@@ -8,16 +8,22 @@ import {
   Pressable,
   Image,
 } from "react-native";
-import React, { useState, useContext, useLayoutEffect, useEffect,useRef } from "react";
+import React, {
+  useState,
+  useContext,
+  useLayoutEffect,
+  useEffect,
+  useRef,
+} from "react";
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import EmojiSelector from "react-native-emoji-selector";
-import { UserType } from "../UserContext";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
+import { UserType } from "../../UserContext";
 
 const ChatMessagesScreen = () => {
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
@@ -31,32 +37,32 @@ const ChatMessagesScreen = () => {
   const [message, setMessage] = useState("");
   const { userId, setUserId } = useContext(UserType);
 
+  //scroll to bottom
   const scrollViewRef = useRef(null);
 
   useEffect(() => {
-    scrollToBottom()
-  },[]);
+    scrollToBottom();
+  }, []);
 
   const scrollToBottom = () => {
-      if(scrollViewRef.current){
-          scrollViewRef.current.scrollToEnd({animated:false})
-      }
-  }
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: false });
+    }
+  };
 
   const handleContentSizeChange = () => {
-      scrollToBottom();
-  }
+    scrollToBottom();
+  };
 
+  //emoji display function
   const handleEmojiPress = () => {
     setShowEmojiSelector(!showEmojiSelector);
   };
 
-
-
   const fetchMessages = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8000/messages/${userId}/${recepientId}`
+        `http://192.168.0.5:8000/messages/${userId}/${recepientId}`
       );
       const data = await response.json();
 
@@ -74,14 +80,16 @@ const ChatMessagesScreen = () => {
     fetchMessages();
   }, []);
 
+  //fetch recipient detail from userId
   useEffect(() => {
     const fetchRecepientData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/user/${recepientId}`
+          `http://192.168.0.5:8000/user/${recepientId}`
         );
-
+        //console.log(response)
         const data = await response.json();
+        //console.log(data)
         setRecepientData(data);
       } catch (error) {
         console.log("error retrieving details", error);
@@ -90,13 +98,16 @@ const ChatMessagesScreen = () => {
 
     fetchRecepientData();
   }, []);
+
+  console.log("recipient data: ", recepientData);
+
   const handleSend = async (messageType, imageUri) => {
     try {
       const formData = new FormData();
       formData.append("senderId", userId);
       formData.append("recepientId", recepientId);
 
-      //if the message type id image or a normal text
+      //check if the message type is an image or a normal text
       if (messageType === "image") {
         formData.append("messageType", "image");
         formData.append("imageFile", {
@@ -109,7 +120,7 @@ const ChatMessagesScreen = () => {
         formData.append("messageText", message);
       }
 
-      const response = await fetch("http://localhost:8000/messages", {
+      const response = await fetch("http://192.168.0.5:8000/messages", {
         method: "POST",
         body: formData,
       });
@@ -125,12 +136,15 @@ const ChatMessagesScreen = () => {
     }
   };
 
-  console.log("messages", selectedMessages);
+  console.log("messages: ", selectedMessages);
+
+  //style header
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "",
       headerLeft: () => (
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          {/*Back Arrow, Image and Name */}
           <Ionicons
             onPress={() => navigation.goBack()}
             name="arrow-back"
@@ -166,6 +180,7 @@ const ChatMessagesScreen = () => {
       headerRight: () =>
         selectedMessages.length > 0 ? (
           <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+            {/*Delete Message */}
             <Ionicons name="md-arrow-redo-sharp" size={24} color="black" />
             <Ionicons name="md-arrow-undo" size={24} color="black" />
             <FontAwesome name="star" size={24} color="black" />
@@ -182,7 +197,7 @@ const ChatMessagesScreen = () => {
 
   const deleteMessages = async (messageIds) => {
     try {
-      const response = await fetch("http://localhost:8000/deleteMessages", {
+      const response = await fetch("http://192.168.0.5:8000/deleteMessages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -192,8 +207,8 @@ const ChatMessagesScreen = () => {
 
       if (response.ok) {
         setSelectedMessages((prevSelectedMessages) =>
-        prevSelectedMessages.filter((id) => !messageIds.includes(id))
-      );
+          prevSelectedMessages.filter((id) => !messageIds.includes(id))
+        );
 
         fetchMessages();
       } else {
@@ -203,10 +218,12 @@ const ChatMessagesScreen = () => {
       console.log("error deleting messages", error);
     }
   };
+
   const formatTime = (time) => {
     const options = { hour: "numeric", minute: "numeric" };
     return new Date(time).toLocaleString("en-US", options);
   };
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -217,9 +234,11 @@ const ChatMessagesScreen = () => {
 
     console.log(result);
     if (!result.canceled) {
+      //call handleSend function if you didnt cancel the pick image
       handleSend("image", result.uri);
     }
   };
+
   const handleSelectMessage = (message) => {
     //check if the message is already selected
     const isSelected = selectedMessages.includes(message._id);
@@ -235,9 +254,14 @@ const ChatMessagesScreen = () => {
       ]);
     }
   };
+
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "#F0F0F0" }}>
-      <ScrollView ref={scrollViewRef} contentContainerStyle={{flexGrow:1}} onContentSizeChange={handleContentSizeChange}>
+      <ScrollView
+        ref={scrollViewRef}
+        contentContainerStyle={{ flexGrow: 1 }}
+        onContentSizeChange={handleContentSizeChange}
+      >
         {messages.map((item, index) => {
           if (item.messageType === "text") {
             const isSelected = selectedMessages.includes(item._id);
@@ -290,8 +314,9 @@ const ChatMessagesScreen = () => {
           }
 
           if (item.messageType === "image") {
+            //access your system folder structure where imagesa are stored
             const baseUrl =
-              "/Users/sujananand/Build/messenger-project/api/files/";
+              "/USER/Desktop/Mobile  App Development/React Native/my-projects/chat-app/api/files/";
             const imageUrl = item.imageUrl;
             const filename = imageUrl.split("/").pop();
             const source = { uri: baseUrl + filename };
@@ -417,4 +442,3 @@ const ChatMessagesScreen = () => {
 export default ChatMessagesScreen;
 
 const styles = StyleSheet.create({});
-

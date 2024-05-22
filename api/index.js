@@ -16,10 +16,13 @@ app.use(passport.initialize());
 const jwt = require("jsonwebtoken");
 
 mongoose
-  .connect("mongodb+srv://oladejianthony4:Tdwonder1@chat-app.2tnqrpx.mongodb.net/", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    "mongodb+srv://oladejianthony4:Tdwonder1@chat-app.2tnqrpx.mongodb.net/",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() => {
     console.log("Connected to Mongo Db");
   })
@@ -33,7 +36,6 @@ app.listen(port, () => {
 
 const User = require("./models/user");
 const Message = require("./models/message");
-
 
 /*User Controller and Routes */
 //endpoint for registration of the user
@@ -104,7 +106,7 @@ app.post("/login", (req, res) => {
 
 //endpoint to get all the users in the app except the user who is currently logged in!
 app.get("/users/:userId", (req, res) => {
-  const loggedInUserId = req.params.userId; 
+  const loggedInUserId = req.params.userId;
   //params "123" e.g users/123
 
   User.find({ _id: { $ne: loggedInUserId } }) //exclude the user that is loggedin
@@ -121,7 +123,7 @@ app.get("/users/:userId", (req, res) => {
 app.post("/friend-request", async (req, res) => {
   const { currentUserId, selectedUserId } = req.body;
   //sender - currentUserId
-  //recipient - selectedUserId 
+  //recipient - selectedUserId
 
   try {
     //update the recepient's friendRequests array in MongoDb!
@@ -208,7 +210,9 @@ app.get("/accepted-friends/:userId", async (req, res) => {
   }
 });
 
+//store files on disk
 const multer = require("multer");
+const { jwtDecode } = require("jwt-decode");
 
 // Configure multer for handling file uploads
 const storage = multer.diskStorage({
@@ -223,7 +227,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-
 
 /*Messages Controller and Routes */
 //endpoint to post Messages and store it in the backend
@@ -269,7 +272,9 @@ app.get("/messages/:senderId/:recepientId", async (req, res) => {
     const { senderId, recepientId } = req.params;
 
     const messages = await Message.find({
+      //"or" operator
       $or: [
+        //tracking messages of both parties
         { senderId: senderId, recepientId: recepientId },
         { senderId: recepientId, recepientId: senderId },
       ],
@@ -300,47 +305,49 @@ app.post("/deleteMessages", async (req, res) => {
   }
 });
 
-
-
-app.get("/friend-requests/sent/:userId",async(req,res) => {
-  try{
-    const {userId} = req.params;
-    const user = await User.findById(userId).populate("sentFriendRequests","name email image").lean();
+app.get("/friend-requests/sent/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId)
+      .populate("sentFriendRequests", "name email image")
+      .lean();
 
     const sentFriendRequests = user.sentFriendRequests;
 
     res.json(sentFriendRequests);
-  } catch(error){
-    console.log("error",error);
+  } catch (error) {
+    console.log("error", error);
     res.status(500).json({ error: "Internal Server" });
   }
-})
+});
 
-app.get("/friends/:userId",(req,res) => {
-  try{
-    const {userId} = req.params;
+app.get("/friends/:userId", (req, res) => {
+  try {
+    const { userId } = req.params;
 
-    User.findById(userId).populate("friends").then((user) => {
-      if(!user){
-        return res.status(404).json({message: "User not found"})
-      }
+    User.findById(userId)
+      .populate("friends")
+      .then((user) => {
+        if (!user) {
+          return res.status(404).json({ message: "User not found" });
+        }
 
-      const friendIds = user.friends.map((friend) => friend._id);
+        const friendIds = user.friends.map((friend) => friend._id);
 
-      res.status(200).json(friendIds);
-    })
-  } catch(error){
-    console.log("error",error);
-    res.status(500).json({message:"internal server error"})
+        res.status(200).json(friendIds);
+      });
+  } catch (error) {
+    console.log("error", error);
+    res.status(500).json({ message: "internal server error" });
   }
+});
+
+app.post("/usersToken", (req, res) => {
+  const {token} = req.body;
+
+  const decoded =jwtDecode(token);
+
+  return res.json(decoded);
 })
-
-
-
-
-
-
-
-
 
 
