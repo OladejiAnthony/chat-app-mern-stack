@@ -37,10 +37,11 @@ const ChatMessagesScreen = () => {
   const [message, setMessage] = useState("");
   const { userId, setUserId } = useContext(UserType);
 
-  //scroll to bottom
+  //scroll to page bottom
   const scrollViewRef = useRef(null);
 
   useEffect(() => {
+    //call function as sson as component mounts
     scrollToBottom();
   }, []);
 

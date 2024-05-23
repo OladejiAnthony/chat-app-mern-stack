@@ -119,6 +119,15 @@ app.get("/users/:userId", (req, res) => {
     });
 });
 
+app.post("/usersToken", (req, res) => {
+  const {token} = req.body;
+
+  const decoded =jwtDecode(token);
+
+  return res.json(decoded);
+})
+
+
 //endpoint to send a request to another user
 app.post("/friend-request", async (req, res) => {
   const { currentUserId, selectedUserId } = req.body;
@@ -305,6 +314,7 @@ app.post("/deleteMessages", async (req, res) => {
   }
 });
 
+//user sent friend-requests
 app.get("/friend-requests/sent/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
@@ -321,6 +331,7 @@ app.get("/friend-requests/sent/:userId", async (req, res) => {
   }
 });
 
+//get friend list of the user
 app.get("/friends/:userId", (req, res) => {
   try {
     const { userId } = req.params;
@@ -342,12 +353,5 @@ app.get("/friends/:userId", (req, res) => {
   }
 });
 
-app.post("/usersToken", (req, res) => {
-  const {token} = req.body;
-
-  const decoded =jwtDecode(token);
-
-  return res.json(decoded);
-})
 
 
