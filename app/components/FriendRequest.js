@@ -3,35 +3,41 @@ import React, { useContext } from "react";
 import { UserType } from "../../UserContext";
 import { useNavigation } from "@react-navigation/native";
 
+//Friend Request's User
 const FriendRequest = ({ item, friendRequests, setFriendRequests }) => {
-    //console.log(item);
-    const { userId, setUserId } = useContext(UserType);
+  //console.log(item);
+  const { userId, setUserId } = useContext(UserType);
 
-    const navigation = useNavigation();
+  const navigation = useNavigation();
 
-  const acceptRequest = async ({friendRequestId}) => {
+  //Accept Friend Request function
+  const acceptRequest = async ({ friendRequestId }) => {
     try {
-        const response = await fetch("http://192.168.0.5:8000/friend-request/accept", {
-            method : "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                senderId: friendRequestId,
-                recepientId: userId
-            })
-        });
-
-        if(response.ok) {
-            setFriendRequests(friendRequests.filter((request) =>  request._id !== friendRequestId));
-            navigation.navigate("Chats");
+      const response = await fetch(
+        "http://192.168.0.5:8000/friend-request/accept",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            senderId: friendRequestId,
+            recepientId: userId,
+          }),
         }
+      );
 
+      if (response.ok) {
+        setFriendRequests(
+          friendRequests.filter((request) => request._id !== friendRequestId)
+        );
+        //go to Chats screen when i accept FriendRequest
+        navigation.navigate("Chats");
+      }
     } catch (error) {
-        console.log("Error: ", error.message)
+      console.log("Error: ", error.message);
     }
-  }
-
+  };
 
   return (
     <Pressable

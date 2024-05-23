@@ -4,6 +4,7 @@ import { UserType } from "../../UserContext";
 import axios from "axios";
 import FriendRequest from "../components/FriendRequest";
 
+//List of Friend Requests
 const FriendsScreen = () => {
   const { userId, setUserId } = useContext(UserType);
   const [friendRequests, setFriendRequests] = useState([]);

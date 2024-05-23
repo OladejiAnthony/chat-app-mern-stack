@@ -314,7 +314,7 @@ app.post("/deleteMessages", async (req, res) => {
   }
 });
 
-//user sent friend-requests
+//user's sent friend-requests
 app.get("/friend-requests/sent/:userId", async (req, res) => {
   try {
     const { userId } = req.params;

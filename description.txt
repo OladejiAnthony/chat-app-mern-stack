@@ -1,3 +1,16 @@
+#Project Description
+//Friend Requests:
+-Add friend (send Friend request)
+-Accept Friend request
+-Display List of Accepted Friends
+
+//Chat Message Section:
+-How to send text-type of message
+-How to send image-type of message
+-How to delete message
+
+
+#Backend Setup
 mongodb = mongodb+srv://oladejianthony4:Tdwonder1@chat-app.2tnqrpx.mongodb.net/
 
 npm init
@@ -5,7 +18,7 @@ npm init
 npm i express cors nodemon mongoose multer passport passport-local jsonwebtoken
 
 
-Frontend-
+#Frontend Setup-
 npm install @react-navigation/native
 npx expo install react-native-screens react-native-safe-area-context
 npm install @react-navigation/native-stack
@@ -13,15 +26,10 @@ npx expo install @react-native-async-storage/async-storage
 npm install jwt-decode
 npx expo install expo-image-picker
 
-packages-
+-Packages-
 expo.icons.fy
 
-
-Backend-
-models
-Routes & Controllers
-
-Laptop-
+-Laptop-
 My Laptop IP Address - replace localhost with "192.168.0.5"
 axios.post("http://192.168.0.5:8000/register", user)
 
@@ -38,3 +46,10 @@ axios.post("http://192.168.0.5:8000/register", user)
 
 
 
+
+
+
+
+#Backend Operations-
+models
+Routes & Controllers

@@ -94,3 +94,5 @@ const UserChat = ({ item }) => {
 export default UserChat;
 
 const styles = StyleSheet.create({});
+
+

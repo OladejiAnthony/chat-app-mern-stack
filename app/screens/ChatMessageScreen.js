@@ -25,6 +25,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import { UserType } from "../../UserContext";
 
+
+//Chat-Messages Screen
 const ChatMessagesScreen = () => {
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
   const [selectedMessages, setSelectedMessages] = useState([]);
@@ -443,3 +445,10 @@ const ChatMessagesScreen = () => {
 export default ChatMessagesScreen;
 
 const styles = StyleSheet.create({});
+
+
+/*
+-How to send text-type of message
+-How to send image-type of message
+-How to delete message
+*/
