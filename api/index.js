@@ -182,6 +182,8 @@ app.post("/friend-request/accept", async (req, res) => {
     const sender = await User.findById(senderId);
     const recepient = await User.findById(recepientId);
 
+    //console.log(senderId, sender)
+
     sender.friends.push(recepientId);
     recepient.friends.push(senderId);
 
@@ -190,7 +192,7 @@ app.post("/friend-request/accept", async (req, res) => {
     );
 
     sender.sentFriendRequests = sender.sentFriendRequests.filter(
-      (request) => request.toString() !== recepientId.toString
+      (request) => request.toString() !== recepientId.toString()
     );
 
     await sender.save();
@@ -264,6 +266,7 @@ app.post("/messages", upload.single("imageFile"), async (req, res) => {
 app.get("/user/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
+    console.log("userId: ", userId)
 
     //fetch the user data from the user ID
     const recepientId = await User.findById(userId);
@@ -279,6 +282,8 @@ app.get("/user/:userId", async (req, res) => {
 app.get("/messages/:senderId/:recepientId", async (req, res) => {
   try {
     const { senderId, recepientId } = req.params;
+
+    console.log({senderId, recepientId})
 
     const messages = await Message.find({
       //"or" operator

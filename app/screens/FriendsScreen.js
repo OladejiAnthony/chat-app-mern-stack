@@ -7,6 +7,7 @@ import FriendRequest from "../components/FriendRequest";
 //List of Friend Requests
 const FriendsScreen = () => {
   const { userId, setUserId } = useContext(UserType);
+  console.log("friend requests:", userId);
   const [friendRequests, setFriendRequests] = useState([]);
   useEffect(() => {
     fetchFriendRequests();
@@ -14,13 +15,13 @@ const FriendsScreen = () => {
 
   const fetchFriendRequests = async () => {
     try {
-      const reponse = await axios.get(
+      const response = await axios.get(
         `http://192.168.0.5:8000/friend-request/${userId}`
       );
-      console.log(Response);
+      //console.log("fetch request response: ", response);
       if (response.status === 200) {
         const friendRequestsData = response.data.map((friendRequest) => ({
-          _id: friendRequest.id,
+          _id: friendRequest._id,
           name: friendRequest.name,
           email: friendRequest.email,
           image: friendRequest.image,
@@ -33,7 +34,7 @@ const FriendsScreen = () => {
     }
   };
 
-  console.log(friendRequests);
+  console.log("friend requests: ", friendRequests);
 
   return (
     <View
@@ -43,15 +44,16 @@ const FriendsScreen = () => {
       }}
     >
       {friendRequests.length > 0 && <Text>Your Friend Requests</Text>}
+      {/* <Text>{friendRequests[0].email}</Text> */}
 
-      {friendRequests.map((item, index) => {
+      {friendRequests.map((item, index) => (
         <FriendRequest
           key={index}
           item={item}
           friendRequests={friendRequests}
           setFriendRequests={setFriendRequests}
-        />;
-      })}
+        />
+      ))}
     </View>
   );
 };

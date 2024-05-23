@@ -38,28 +38,42 @@ const LoginScreen = () => {
   // }, []);
 
 
-  const handleLogin = () => {
-    const user = {
-      email: email,
-      password: password,
-    };
-    console.log("user: ",user)
-
-    axios
-      .post("http://192.168.0.5:8000/login", user)
-      .then((response) => {
-        console.log("response: ", response);
-        const token = response.data.token;
-        console.log("token: ", token)
-        AsyncStorage.setItem("authToken", token);
-
-        navigation.replace("Home");
-      })
-      .catch((error) => {
-        Alert.alert("Login Error", "Invalid email or password");
-        console.log("Login Error", error);
-      });
+  // Login function
+const handleLogin = () => {
+  const user = {
+    email: email,
+    password: password,
   };
+
+
+  axios
+    .post("http://192.168.0.5:8000/login", user)
+    .then((response) => {
+      console.log("Login response: ", response);
+      const token = response.data.token;
+      console.log("Token received: ", token);
+      AsyncStorage.setItem("authToken", token);
+      navigation.replace("Home");
+    })
+    .catch((error) => {
+      console.error("Login Error: ", error);
+      if (error.response) {
+        // Server responded with a status other than 200 range
+        console.error("Response error: ", error.response.data);
+        Alert.alert("Login Error", error.response.data.message || "Invalid email or password");
+      } else if (error.request) {
+        // Request was made but no response received
+        console.error("No response received: ", error.request);
+        Alert.alert("Login Error", "Network Error: No response received from the server");
+      } else {
+        // Something else caused the error
+        console.error("Error setting up request: ", error.message);
+        Alert.alert("Login Error", "Network Error: " + error.message);
+      }
+    });
+
+    console.log("User login details: ", user);
+};
 
 
   return (

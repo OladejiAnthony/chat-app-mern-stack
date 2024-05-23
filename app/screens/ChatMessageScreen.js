@@ -104,6 +104,21 @@ const ChatMessagesScreen = () => {
 
   console.log("recipient data: ", recepientData);
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+    if (!result.canceled) {
+      //call handleSend function if you didnt cancel the pick image
+      handleSend("image", result.uri);
+    }
+  };
+
   const handleSend = async (messageType, imageUri) => {
     try {
       const formData = new FormData();
@@ -227,20 +242,7 @@ const ChatMessagesScreen = () => {
     return new Date(time).toLocaleString("en-US", options);
   };
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    console.log(result);
-    if (!result.canceled) {
-      //call handleSend function if you didnt cancel the pick image
-      handleSend("image", result.uri);
-    }
-  };
+  
 
   const handleSelectMessage = (message) => {
     //check if the message is already selected

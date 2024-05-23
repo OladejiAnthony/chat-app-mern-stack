@@ -11,6 +11,8 @@ import { UserType } from "../../UserContext";
 import { useNavigation } from "@react-navigation/native";
 import UserChat from "../components/UserChat";
 
+
+//List of Chats
 const ChatsScreen = () => {
   const [acceptedFriends, setAcceptedFriends] = useState([]);
   const { userId, setUserId } = useContext(UserType);
@@ -19,10 +21,15 @@ const ChatsScreen = () => {
   useEffect(() => {
     const acceptedFriendsList = async () => {
       try {
+        console.log({userId})
         const response = await fetch(
           `http://192.168.0.5:8000/accepted-friends/${userId}`
         );
+        console.log("chat screen response: ", response)
+
         const data = await response.json();
+        console.log({data})
+        console.log("chat screen response data: ", data)
 
         if (response.ok) {
           setAcceptedFriends(data);
@@ -36,12 +43,18 @@ const ChatsScreen = () => {
   }, []);
 
   console.log("friends: ", acceptedFriends);
+  
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Pressable style={{}}>
-        {acceptedFriends.map((index, item) => {
-          <UserChat key={index} item={item} />;
+      {/* <Text>{acceptedFriends[0].email}</Text> */}
+        {acceptedFriends.map((item, index) => {
+          console.log({index, item})
+          return (
+
+          <UserChat key={index} item={item} />
+          )
         })}
       </Pressable>
     </ScrollView>
@@ -51,3 +64,4 @@ const ChatsScreen = () => {
 export default ChatsScreen;
 
 const styles = StyleSheet.create({});
+

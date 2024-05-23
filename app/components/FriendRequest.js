@@ -1,18 +1,18 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import React, { useContext } from "react";
-import { UserType } from "../../UserContext";
 import { useNavigation } from "@react-navigation/native";
+import { UserType } from "../../UserContext";
 
-//Friend Request's User
 const FriendRequest = ({ item, friendRequests, setFriendRequests }) => {
-  //console.log(item);
+  //console.log("friendRequests details: ", friendRequests, item)
   const { userId, setUserId } = useContext(UserType);
-
+  console.log("friend request: ", userId)
   const navigation = useNavigation();
 
-  //Accept Friend Request function
-  const acceptRequest = async ({ friendRequestId }) => {
+
+  const acceptRequest = async (friendRequestId) => {
     try {
+      //console.log({friendRequestId, userId})
       const response = await fetch(
         "http://192.168.0.5:8000/friend-request/accept",
         {
@@ -27,17 +27,24 @@ const FriendRequest = ({ item, friendRequests, setFriendRequests }) => {
         }
       );
 
-      if (response.ok) {
-        setFriendRequests(
-          friendRequests.filter((request) => request._id !== friendRequestId)
-        );
-        //go to Chats screen when i accept FriendRequest
-        navigation.navigate("Chats");
+      if (!response.ok) {
+        //console.log(response)
+        throw new Error("Failed to accept friend request");
       }
-    } catch (error) {
-      console.log("Error: ", error.message);
+      
+      const result = await response.json();
+      //console.log("Accepted friend response: ", result);
+
+      setFriendRequests(
+        friendRequests.filter((request) => request._id !== friendRequestId)
+      );
+      navigation.navigate("Chats");
+    } catch (err) {
+      console.log("Error accepting the friend request: ", err);
     }
   };
+
+  //console.log("accept friend requests: ", friendRequests);
 
   return (
     <Pressable
@@ -50,22 +57,20 @@ const FriendRequest = ({ item, friendRequests, setFriendRequests }) => {
     >
       <Image
         style={{ width: 50, height: 50, borderRadius: 25 }}
-        source={{ uri: item.Image }}
+        source={{ uri: item.image }}
       />
 
-      <Text style={{ fontSize: 15, flexWrap: "bold", marginLeft: 10, flex: 1 }}>
+      <Text
+        style={{ fontSize: 15, fontWeight: "bold", marginLeft: 10, flex: 1 }}
+      >
         {item?.name} sent you a friend request!!
       </Text>
 
       <Pressable
+        onPress={() => acceptRequest(item._id)}
         style={{ backgroundColor: "#0066b2", padding: 10, borderRadius: 6 }}
       >
-        <Text
-          onPress={() => acceptRequest._id}
-          style={{ textAlign: "center", color: "white" }}
-        >
-          Accept
-        </Text>
+        <Text style={{ textAlign: "center", color: "white" }}>Accept</Text>
       </Pressable>
     </Pressable>
   );
@@ -74,3 +79,4 @@ const FriendRequest = ({ item, friendRequests, setFriendRequests }) => {
 export default FriendRequest;
 
 const styles = StyleSheet.create({});
+

@@ -4,22 +4,21 @@ import { useNavigation } from "@react-navigation/native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { UserType } from "../../UserContext";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import jwt_decode from "jwt-decode";
+//import jwt_decode from "jwt-decode";
 import axios from "axios";
 import User from "../components/User";
 import TestComponent from "../test/TestComponent";
 
 
-console.log("jwt: ",jwt_decode)
+//console.log("jwt: ",jwt_decode)
 
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const { userId, setUserId } = useContext(UserType);
-  console.log("userId: ", userId)
+  //console.log("userId: ", userId)
   const [users, setUsers] = useState([]);
 
-  
   //style header
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -56,19 +55,22 @@ const HomeScreen = () => {
           axios
             .post(`http://192.168.0.5:8000/usersToken`, {token})
             .then((response) => {
-              console.log("response1: ",response.data)
+              console.log("post response:", response)
+              console.log("post response data: ",response.data)
               setUserId(response.data.userId);
             })
             .catch((error) => {
               console.log("error retrieving userId", error);
             });
 
-            //console.log(userId)
+            console.log(userId)
+
 
           axios
             .get(`http://192.168.0.5:8000/users/${userId}`)
             .then((response) => {
-              console.log("response: ",response)
+              console.log("get response: ",response)
+              console.log("get response data :", response.data)
               setUsers(response.data);
             })
             .catch((error) => {
@@ -86,7 +88,7 @@ const HomeScreen = () => {
   }, [setUserId]);
 
   console.log("users: ", users);
-
+  
   return (
     <View>
       <View style={{ padding: 10 }}>

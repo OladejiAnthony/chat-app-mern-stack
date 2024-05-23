@@ -1,25 +1,31 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { UserType } from "../../UserContext";
 import { useNavigation } from "@react-navigation/native";
 
+//Chat User
 const UserChat = ({ item }) => {
-  console.log(item);
+  console.log("item", item);
 
   const { userId, setUserId } = useContext(UserType);
   const [messages, setMessages] = useState([]);
   const navigation = useNavigation();
+
+
   const fetchMessages = async () => {
     try {
       const response = await fetch(
         `http://192.168.0.5:8000/messages/${userId}/${item._id}`
       );
+      console.log("user response: ", response)
       const data = await response.json();
+      console.log("user response data: ", response.data)
+      
 
       if (response.ok) {
         setMessages(data);
       } else {
-        console.log("error showing messags", response.status.message);
+        console.log("error showing messages", response.status.message);
       }
     } catch (error) {
       console.log("error fetching messages", error);
@@ -29,6 +35,7 @@ const UserChat = ({ item }) => {
   useEffect(() => {
     fetchMessages();
   }, []);
+
   console.log(messages);
 
   const getLastMessage = () => {
@@ -39,6 +46,8 @@ const UserChat = ({ item }) => {
     const n = userMessages.length;
 
     return userMessages[n - 1];
+
+    
   };
 
   const lastMessage = getLastMessage();

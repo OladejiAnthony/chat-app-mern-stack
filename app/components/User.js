@@ -32,7 +32,7 @@ const User = ({ item }) => {
   useEffect(() => {
     const fetchUserFriends = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/friends/${userId}`);
+        const response = await fetch(`http://192.168.0.5:8000/friends/${userId}`);
 
         const data = await response.json();
 

@@ -61,12 +61,13 @@ const RegisterScreen = () => {
           backgroundColor: "white",
           padding: 10,
           alignItems: "center",
+          marginBottom: 20
         }}
       >
         <KeyboardAvoidingView>
           <View
             style={{
-              marginTop: 50,
+              marginTop: 100,
               justifyContent: "center",
               alignItems: "center",
             }}
